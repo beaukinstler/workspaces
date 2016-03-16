@@ -7,14 +7,15 @@
         <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True"
             AutoGenerateColumns="False" CellPadding="4" DataKeyNames="deviceID" DataSourceID="SqlDataSource1"
             EmptyDataText="There are no data records to display." ForeColor="#333333" 
-            GridLines="None" PageSize="50" style="margin-right: 281px" Width="892px">
+            GridLines="None" PageSize="15" style="margin-right: 281px" Width="892px">
             <RowStyle BackColor="#F7F6F3" ForeColor="#333333" />
             <Columns>
                 <asp:CommandField ShowSelectButton="True" ShowEditButton="True" />
                 <asp:BoundField DataField="deviceID" HeaderText="Device ID" InsertVisible="False"
                     ReadOnly="True" SortExpression="deviceID" />
                 <asp:BoundField DataField="deviceName" HeaderText="deviceName" SortExpression="deviceName" />
-                <asp:TemplateField HeaderText="Workstation Description" SortExpression="PrimaryUse">
+                <asp:TemplateField HeaderText="Location/Workstation" 
+                    SortExpression="PrimaryUse">
                     <EditItemTemplate>
                         <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="workstationsDataSource"
                             DataTextField="PrimaryUse" DataValueField="workstationID" SelectedValue='<%# Bind("workstationID") %>'
@@ -175,9 +176,10 @@ WHERE workstationID = @ws">
         <asp:SqlDataSource ID="DeviceFormDS" runat="server" ConflictDetection="CompareAllValues"
             
         ConnectionString="<%$ ConnectionStrings:WorkstationsConnectionString %>" DeleteCommand="DELETE FROM [Devices] WHERE [deviceID] = @original_deviceID "
-            InsertCommand="INSERT INTO Devices(workstationID, patchPanelID, hasWireless, licensedForAll, staticIPAddress, deviceTypeID, deviceName, needsLabel) VALUES (@workstationID, @patchPanelID, @hasWireless, @licensedForAll, @staticIPAddress, @deviceTypeID, @deviceName, @needsLabel)"
+            InsertCommand="INSERT INTO Devices(workstationID, patchPanelID, hasWireless, licensedForAll, staticIPAddress, deviceTypeID, deviceName, needsLabel) VALUES (@workstationID, @patchPanelID, @hasWireless, @licensedForAll, @staticIPAddress, @deviceTypeID, @deviceName, 1)"
             OldValuesParameterFormatString="original_{0}" SelectCommand="SELECT * FROM [Devices] WHERE deviceID = @deviceID"
             
+        
         
         UpdateCommand="UPDATE Devices SET workstationID = @workstationID, patchPanelID = @patchPanelID, hasWireless = @hasWireless, licensedForAll = @licensedForAll, staticIPAddress = @staticIPAddress, deviceTypeID = @deviceTypeID, deviceName = @deviceName, needsLabel = @needsLabel WHERE (deviceID = @original_deviceID) AND (workstationID = @original_workstationID OR workstationID IS NULL AND @original_workstationID IS NULL) AND (patchPanelID = @original_patchPanelID OR patchPanelID IS NULL AND @original_patchPanelID IS NULL) AND (hasWireless = @original_hasWireless OR hasWireless IS NULL AND @original_hasWireless IS NULL) AND (licensedForAll = @original_licensedForAll OR licensedForAll IS NULL AND @original_licensedForAll IS NULL) AND (staticIPAddress = @original_staticIPAddress OR staticIPAddress IS NULL AND @original_staticIPAddress IS NULL) AND (deviceTypeID = @original_deviceTypeID) AND (needsLabel = @original_needsLabel)">
             <SelectParameters>
@@ -213,11 +215,13 @@ WHERE workstationID = @ws">
                 <asp:Parameter Name="staticIPAddress" Type="String" />
                 <asp:Parameter Name="deviceTypeID" Type="Int32" />
                 <asp:Parameter Name="deviceName" Type="String" />
-                <asp:Parameter Name="needsLabel" />
             </InsertParameters>
         </asp:SqlDataSource>
         <asp:SqlDataSource ID="workstationsDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:WorkstationsConnectionString %>"
-            SelectCommand="SELECT DISTINCT PrimaryUse, PrimaryUse + ' - ' + worstationCode AS PrimaryAndCode, workstationID FROM vWorkstationDetails">
+            
+        SelectCommand="SELECT DISTINCT PrimaryUse, PrimaryUse + ' - ' + worstationCode AS PrimaryAndCode, workstationID FROM vWorkstationDetails
+union all
+select 'no set location' as PrimaryUse,  'no set location' as PrimaryAndCode, NULL as workstatipnID">
         </asp:SqlDataSource>
         <asp:SqlDataSource ID="PatchPanelDatasource" runat="server" ConnectionString="<%$ ConnectionStrings:WorkstationsConnectionString %>"
             SelectCommand="SELECT DISTINCT [patchPanelID], [panelCode] FROM [PatchPanels]
@@ -232,11 +236,12 @@ SELECT NULL as patPanelID, NULL as panelCode"></asp:SqlDataSource>
         ConnectionString="<%$ ConnectionStrings:WorkstationsConnectionString %>" DeleteCommand="DELETE FROM [Devices] WHERE [deviceID] = @original_deviceID AND (([workstationID] = @original_workstationID) OR ([workstationID] IS NULL AND @original_workstationID IS NULL)) AND (([patchPanelID] = @original_patchPanelID) OR ([patchPanelID] IS NULL AND @original_patchPanelID IS NULL)) AND (([hasWireless] = @original_hasWireless) OR ([hasWireless] IS NULL AND @original_hasWireless IS NULL)) AND (([licensedForAll] = @original_licensedForAll) OR ([licensedForAll] IS NULL AND @original_licensedForAll IS NULL)) AND (([staticIPAddress] = @original_staticIPAddress) OR ([staticIPAddress] IS NULL AND @original_staticIPAddress IS NULL)) AND [deviceTypeID] = @original_deviceTypeID"
             InsertCommand="INSERT INTO [Devices] ([workstationID], [patchPanelID], [hasWireless], [licensedForAll], [staticIPAddress], [deviceTypeID]) VALUES (@workstationID, @patchPanelID, @hasWireless, @licensedForAll, @staticIPAddress, @deviceTypeID)"
             OldValuesParameterFormatString="original_{0}" ProviderName="<%$ ConnectionStrings:WorkstationsConnectionString.ProviderName %>"
-            SelectCommand="SELECT DISTINCT Devices.deviceID, Devices.workstationID, Devices.patchPanelID, Devices.hasWireless, Devices.licensedForAll, Devices.staticIPAddress, Devices.deviceTypeID, DeviceTypes.Type, PatchPanels.panelCode, DeviceTypes.Description, vWorkstationDetails.PrimaryUse, Devices.deviceName, Devices.needsLabel, vWorkstationDetails.worstationCode FROM Devices INNER JOIN DeviceTypes ON Devices.deviceTypeID = DeviceTypes.deviceTypeID INNER JOIN vWorkstationDetails ON Devices.workstationID = vWorkstationDetails.workstationID LEFT OUTER JOIN PatchPanels ON Devices.patchPanelID = PatchPanels.patchPanelID WHERE (Devices.deviceTypeID = 1) OR (Devices.deviceTypeID = 2)"
+            SelectCommand="SELECT DISTINCT Devices.deviceID, Devices.workstationID, Devices.patchPanelID, Devices.hasWireless, Devices.licensedForAll, Devices.staticIPAddress, Devices.deviceTypeID, DeviceTypes.Type, PatchPanels.panelCode, DeviceTypes.Description, vWorkstationDetails.PrimaryUse, Devices.deviceName, Devices.needsLabel, vWorkstationDetails.worstationCode FROM Devices INNER JOIN DeviceTypes ON Devices.deviceTypeID = DeviceTypes.deviceTypeID LEFT OUTER JOIN vWorkstationDetails ON Devices.workstationID = vWorkstationDetails.workstationID LEFT OUTER JOIN PatchPanels ON Devices.patchPanelID = PatchPanels.patchPanelID WHERE (Devices.deviceTypeID = 1) OR (Devices.deviceTypeID = 2)"
             
             
             
-        UpdateCommand="UPDATE [Devices] SET [workstationID] = @workstationID, [patchPanelID] = @patchPanelID, [hasWireless] = @hasWireless, [licensedForAll] = @licensedForAll, [staticIPAddress] = @staticIPAddress, [deviceTypeID] = @deviceTypeID WHERE [deviceID] = @original_deviceID AND (([workstationID] = @original_workstationID) OR ([workstationID] IS NULL AND @original_workstationID IS NULL)) AND (([patchPanelID] = @original_patchPanelID) OR ([patchPanelID] IS NULL AND @original_patchPanelID IS NULL)) AND (([hasWireless] = @original_hasWireless) OR ([hasWireless] IS NULL AND @original_hasWireless IS NULL)) AND (([licensedForAll] = @original_licensedForAll) OR ([licensedForAll] IS NULL AND @original_licensedForAll IS NULL)) AND (([staticIPAddress] = @original_staticIPAddress) OR ([staticIPAddress] IS NULL AND @original_staticIPAddress IS NULL)) AND [deviceTypeID] = @original_deviceTypeID">
+        
+        UpdateCommand="UPDATE Devices SET workstationID = @workstationID, patchPanelID = @patchPanelID, hasWireless = @hasWireless, licensedForAll = @licensedForAll, staticIPAddress = @staticIPAddress, deviceTypeID = @deviceTypeID, deviceName = @deviceName WHERE (deviceID = @original_deviceID) AND (workstationID = @original_workstationID OR workstationID IS NULL AND @original_workstationID IS NULL) AND (patchPanelID = @original_patchPanelID OR patchPanelID IS NULL AND @original_patchPanelID IS NULL) AND (hasWireless = @original_hasWireless OR hasWireless IS NULL AND @original_hasWireless IS NULL) AND (licensedForAll = @original_licensedForAll OR licensedForAll IS NULL AND @original_licensedForAll IS NULL) AND (staticIPAddress = @original_staticIPAddress OR staticIPAddress IS NULL AND @original_staticIPAddress IS NULL) AND (deviceTypeID = @original_deviceTypeID)">
             <DeleteParameters>
                 <asp:Parameter Name="original_deviceID" Type="Int32" />
                 <asp:Parameter Name="original_workstationID" Type="Int32" />
@@ -253,6 +258,7 @@ SELECT NULL as patPanelID, NULL as panelCode"></asp:SqlDataSource>
                 <asp:Parameter Name="licensedForAll" Type="Boolean" />
                 <asp:Parameter Name="staticIPAddress" Type="String" />
                 <asp:Parameter Name="deviceTypeID" Type="Int32" />
+                <asp:Parameter Name="deviceName" />
                 <asp:Parameter Name="original_deviceID" Type="Int32" />
                 <asp:Parameter Name="original_workstationID" Type="Int32" />
                 <asp:Parameter Name="original_patchPanelID" Type="Int32" />
