@@ -1,0 +1,58 @@
+﻿body 
+{
+    font-family:Proxima Nova Rg,Tahoma,Arial;
+    font-size:20px;
+   
+    
+
+}
+
+.workstation_type
+{
+    font-size:28px;
+    font-weight:bold;
+}
+
+
+.details
+{
+    font-weight:bold;
+}
+
+.other_info
+{
+    font-size:small;
+    font-weight:normal;
+    
+}
+
+.shared
+{
+    border-width: 5px;
+    border-color: inherit;
+    padding: 10px;
+    border-style: solid;
+    color:Green;
+    width: 371px;
+}
+
+.dedicated
+{
+
+    border-width: 5px;
+    border-color: inherit;
+    color:Blue;
+
+        padding:10px;
+        border-style:solid;
+    width: 401px;
+}
+
+.restricted
+{
+    border-color:#cc6600;
+    padding:10px;
+    border:5px;
+    border-style:solid;
+    color:#cc6600;
+}

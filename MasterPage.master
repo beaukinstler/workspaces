@@ -1,0 +1,77 @@
+﻿<%@ Master Language="VB" CodeFile="MasterPage.master.vb" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="StyleSheet.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .style1
+        {
+            width: 77px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <table style="width:100%;">
+            <tr>
+                <td class="style1">
+        <asp:Menu ID="Menu1" runat="server" BackColor="#F7F6F3" DynamicHorizontalOffset="2" 
+                        Font-Names="Verdana" Font-Size="11px" ForeColor="#7C6F57" 
+                        Orientation="Horizontal" StaticSubMenuIndent="10px">
+            <StaticSelectedStyle BackColor="#5D7B9D" />
+            <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+            <DynamicHoverStyle BackColor="#7C6F57" ForeColor="White" />
+            <DynamicMenuStyle BackColor="#F7F6F3" />
+            <DynamicSelectedStyle BackColor="#5D7B9D" />
+            <DynamicMenuItemStyle Font-Size="Larger" HorizontalPadding="5px" 
+                VerticalPadding="2px" />
+            <StaticHoverStyle BackColor="#7C6F57" ForeColor="White" />
+            <Items>
+                <asp:MenuItem NavigateUrl="~/WorkstationList.aspx" Text="Home List" 
+                    Value="Home List"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/Devices.aspx" Text="Devices" Value="Devices">
+                </asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/DeviceTypesForm.aspx" Text="DeviceTypes" 
+                    Value="DeviceTypes">
+                </asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/DirectDials.aspx" Text="DirectDials" 
+                    Value="DirectDials"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/Extensions.aspx" Text="Extenstions" 
+                    Value="Extenstions"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/StaffList.aspx" Text="Staff list" 
+                    Value="Staff list"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/WorkStations.aspx?ws=2" Text="WorkStations" 
+                    Value="WorkStations"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Default" 
+                    Value="Link to Default"></asp:MenuItem>
+                <asp:MenuItem NavigateUrl="~/import.aspx" Text="Import Staff" 
+                    Value="Import Staff"></asp:MenuItem>
+            </Items>
+            <StaticItemTemplate>
+                <%# Eval("Text") %>
+            </StaticItemTemplate>
+        </asp:Menu>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style1">
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</body>
+</html>
