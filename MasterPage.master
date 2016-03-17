@@ -37,8 +37,6 @@
                     Value="Home List"></asp:MenuItem>
                 <asp:MenuItem NavigateUrl="~/Devices.aspx" Text="Devices" Value="Devices">
                 </asp:MenuItem>
-                <asp:MenuItem NavigateUrl="~/DevicesNodes.aspx" Text="Nodes" Value="Nodes">
-                </asp:MenuItem>
                 <asp:MenuItem NavigateUrl="~/DeviceTypesForm.aspx" Text="DeviceTypes" 
                     Value="DeviceTypes">
                 </asp:MenuItem>

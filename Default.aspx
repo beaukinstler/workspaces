@@ -43,7 +43,7 @@
                     <br />
         <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/WorkstationList.aspx"
             Style="z-index: 100; left: 77px;  top: 49px" 
-            height="16px" width="137px">Location List</asp:HyperLink>
+            height="16px" width="137px">Workstation List</asp:HyperLink>
                     <br />
         <asp:HyperLink ID="HyperLink3" runat="server" NavigateUrl="~/Extensions.aspx" Style="z-index: 101;
             left: 77px;  top: 113px" height="16px" width="135px">Extensions List</asp:HyperLink>
