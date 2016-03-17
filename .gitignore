@@ -10,8 +10,8 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Ignore web.config
-web.config
+# Ignore web.config until we're sure it's clean
+#web.config
 
 # Build results
 [Dd]ebug/
